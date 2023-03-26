@@ -1,6 +1,9 @@
+include .env
 
+.PHONY: lint
 lint:
 	golangci-lint run
 
+.PHONY: run
 run:
-	go run ./cmd/main/main.go
+	AQI_API_KEY=$(AQI_API_KEY) go run ./cmd/main/main.go
