@@ -1,9 +1,10 @@
 package parsers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
@@ -69,13 +70,14 @@ func ParseAQI(city string, state string, country string, key string) (*Response,
 
 	defer resp.Body.Close()
 
-	jsonBody, err := ioutil.ReadAll(resp.Body)
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, resp.Body)
 	if err != nil {
 		log.Panicln(err)
 		return response, err
 	}
 
-	err = json.Unmarshal([]byte(jsonBody), response)
+	err = json.Unmarshal(buf.Bytes(), response)
 	if err != nil {
 		log.Panicln(err)
 		return response, err
