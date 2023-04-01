@@ -6,4 +6,4 @@ lint:
 
 .PHONY: run
 run:
-	AQI_API_KEY=$(AQI_API_KEY) go run ./cmd/main/main.go
+	OPEN_WEATHER_API_KEY=$(OPEN_WEATHER_API_KEY) go run ./cmd/main/main.go

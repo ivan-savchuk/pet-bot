@@ -9,60 +9,38 @@ import (
 	"net/http"
 )
 
-type Response struct {
-	Status string `json:"status"`
-	Data   Data   `json:"data"`
+type AQIData struct {
+	// Coordinates []float64 `json:"coord"`
+	List []struct {
+		Dt   int64 `json:"dt"`
+		Main struct {
+			Aqi int `json:"aqi"`
+		} `json:"main"`
+		Components struct {
+			Co    float64 `json:"co"`
+			No    float64 `json:"no"`
+			No2   float64 `json:"no2"`
+			O3    float64 `json:"o3"`
+			So2   float64 `json:"so2"`
+			Pm2_5 float64 `json:"pm2_5"`
+			Pm10  float64 `json:"pm10"`
+			Nh3   float64 `json:"nh3"`
+		} `json:"components"`
+	} `json:"list"`
 }
 
-type Data struct {
-	City     string   `json:"city"`
-	State    string   `json:"state"`
-	Country  string   `json:"country"`
-	Location Location `json:"location"`
-	Current  Current  `json:"current"`
-}
-
-type Location struct {
-	Type        string    `json:"type"`
-	Coordinates []float64 `json:"coordinates"`
-}
-
-type Current struct {
-	Pollution Pollution `json:"pollution"`
-	Weather   Weather   `json:"weather"`
-}
-
-type Pollution struct {
-	Ts     string `json:"ts"`
-	Aqius  int    `json:"aqius"`
-	Mainus string `json:"mainus"`
-	Aqicn  int    `json:"aqicn"`
-	Maincn string `json:"maincn"`
-}
-
-type Weather struct {
-	Ts string  `json:"ts"`
-	Tp float64 `json:"tp"`
-	Pr float64 `json:"pr"`
-	Hu float64 `json:"hu"`
-	Ws float64 `json:"ws"`
-	Wd float64 `json:"wd"`
-	Ic string  `json:"ic"`
-}
-
-func ParseAQI(city string, state string, country string, key string) (*Response, error) {
-
-	response := &Response{}
+func ParseAQI(lat float32, lon float32, apiKey *string) (*AQIData, error) {
+	response := &AQIData{}
 
 	resp, err := http.Get(
 		fmt.Sprintf(
-			"http://api.airvisual.com/v2/city?city=%v&state=%v&country=%v&key=%v",
-			city,
-			state,
-			country,
-			key,
+			"https://api.openweathermap.org/data/2.5/air_pollution?lat=%v&lon=%v&APPID=%v",
+			lat,
+			lon,
+			*apiKey,
 		),
 	)
+
 	if err != nil {
 		log.Panicln(err)
 		return response, err
