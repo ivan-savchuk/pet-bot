@@ -13,6 +13,7 @@ jobs:
     env:
       GOPATH: ${{ github.workspace }}
       GOBIN: ${{ github.workspace }}/bin
+      GOROOT: /usr/local/go
     steps:
     - uses: actions/checkout@v3
 
