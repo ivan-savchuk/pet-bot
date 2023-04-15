@@ -4,20 +4,66 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
+	// tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/ivan-savchuk/pet-etl/pkg/parsers"
+	"github.com/ivan-savchuk/pet-etl/pkg/pgdb"
 )
 
 var WeatherAPIKey string = "undefined"
+var TelegramToken string = "undefined"
 
 func init() {
 	if value, ok := os.LookupEnv("OPEN_WEATHER_API_KEY"); ok {
 		WeatherAPIKey = value
 	}
+
+	if value, ok := os.LookupEnv("TELEGRAM_TOKEN"); ok {
+		TelegramToken = value
+	}
 }
 
 func main() {
-	log.Println("Weather + AQI!")
+	db, err := pgdb.GetPGConnection()
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	var now time.Time
+
+	err = db.QueryRow("SELECT NOW()").Scan(&now)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(now)
+	// bot, err := tgbotapi.NewBotAPI(TelegramToken)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// bot.Debug = true
+
+	// log.Printf("Authorized on account %s", bot.Self.UserName)
+
+	// u := tgbotapi.NewUpdate(0)
+	// u.Timeout = 60
+
+	// updates := bot.GetUpdatesChan(u)
+
+	// for update := range updates {
+	// 	if update.Message != nil { // If we got a message
+	// 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+
+	// 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+	// 		msg.ReplyToMessageID = update.Message.MessageID
+
+	// 		bot.Send(msg)
+	// 	}
+	// }
 }
 
 func getWeather() {

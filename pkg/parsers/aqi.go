@@ -10,7 +10,6 @@ import (
 )
 
 type AQIData struct {
-	// Coordinates []float64 `json:"coord"`
 	List []struct {
 		Dt   int64 `json:"dt"`
 		Main struct {
