@@ -1,0 +1,34 @@
+name: Go
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.20
+    
+    - name: Install dependecies
+      run: |
+        go mod download
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
+    
+    - name: Build
+      run: go build -v ./cmd/main/main.go
+    
+    - name: Lint
+      run: golangci-lint run
+
+    # TODO: add unit-tests
+    # - name: Test
+    #   run: go test -v ./...
