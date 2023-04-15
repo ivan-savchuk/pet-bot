@@ -10,10 +10,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    env:
-      GOPATH: ${{ github.workspace }}
-      GOBIN: ${{ github.workspace }}/bin
-      GOROOT: /usr/local/go
+    # env:
+    #   GOPATH: ${{ github.workspace }}
+    #   GOBIN: ${{ github.workspace }}/bin
+    #   GOROOT: /usr/local/go
     steps:
     - uses: actions/checkout@v3
 
