@@ -28,7 +28,7 @@ type AQIData struct {
 	} `json:"list"`
 }
 
-func ParseAQI(lat float32, lon float32, apiKey *string) (*AQIData, error) {
+func ParseAQI(lat float64, lon float64, apiKey string) (*AQIData, error) {
 	response := &AQIData{}
 
 	resp, err := http.Get(
@@ -36,7 +36,7 @@ func ParseAQI(lat float32, lon float32, apiKey *string) (*AQIData, error) {
 			"https://api.openweathermap.org/data/2.5/air_pollution?lat=%v&lon=%v&APPID=%v",
 			lat,
 			lon,
-			*apiKey,
+			apiKey,
 		),
 	)
 
