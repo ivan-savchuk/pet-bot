@@ -71,14 +71,14 @@ type WeatherData struct {
 	Cod        int       `json:"cod"`
 }
 
-func ParseWeather(lat float32, lon float32, apiKey *string) (*WeatherData, error) {
+func ParseWeather(lat float64, lon float64, apiKey string) (*WeatherData, error) {
 	weather := &WeatherData{}
 	resp, err := http.Get(
 		fmt.Sprintf(
 			"https://api.openweathermap.org/data/2.5/weather?lat=%v&lon=%v&APPID=%v&units=metric&lang=en",
 			lat,
 			lon,
-			*apiKey,
+			apiKey,
 		),
 	)
 	if err != nil {
