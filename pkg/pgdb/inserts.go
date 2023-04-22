@@ -28,7 +28,10 @@ func InsertIntoChats(chatID int64, cityID int64) {
 	_, err = tx.ExecContext(ctx, query)
 	if err != nil {
 		log.Println("Can't execute insert!")
-		tx.Rollback()
+		if rb := tx.Rollback(); rb != nil {
+			log.Fatalf("query failed: %v, unable to abort: %v", err, rb)
+		}
+		log.Fatal(err)
 		return
 	}
 
@@ -61,8 +64,10 @@ func InsertIntoAQI(aqi *int, descr string, pm25 *float64, lat *float64, lon *flo
 
 	_, err = tx.ExecContext(ctx, query)
 	if err != nil {
-		log.Println("Can't execute insert!")
-		tx.Rollback()
+		if rb := tx.Rollback(); rb != nil {
+			log.Fatalf("query failed: %v, unable to abort: %v", err, rb)
+		}
+		log.Fatal(err)
 		return
 	}
 
@@ -108,8 +113,10 @@ func InsertIntoWeather(
 
 	_, err = tx.ExecContext(ctx, query)
 	if err != nil {
-		log.Println("Can't execute insert!")
-		tx.Rollback()
+		if rb := tx.Rollback(); rb != nil {
+			log.Fatalf("query failed: %v, unable to abort: %v", err, rb)
+		}
+		log.Fatal(err)
 		return
 	}
 

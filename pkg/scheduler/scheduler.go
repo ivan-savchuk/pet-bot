@@ -1,6 +1,7 @@
 package scheduler
 
 import (
+	"log"
 	"time"
 
 	gocron "github.com/go-co-op/gocron"
@@ -18,7 +19,10 @@ func (s *Scheduler) SetNewScheduler(timezone *time.Location) *gocron.Scheduler {
 }
 
 func (s *Scheduler) AddNewJob(crontab string, Job func()) {
-	s.scheduler.Cron(crontab).Do(Job)
+	_, err := s.scheduler.Cron(crontab).Do(Job)
+	if err != nil {
+		log.Panicf("\nCould not set new job for provide crontab '%v'", crontab)
+	}
 }
 
 func (s *Scheduler) Start() {

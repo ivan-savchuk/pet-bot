@@ -28,7 +28,10 @@ func UpdateChatCity(chatID int64, cityID int64) {
 
 	_, err = tx.ExecContext(ctx, query)
 	if err != nil {
-		tx.Rollback()
+		if rb := tx.Rollback(); rb != nil {
+			log.Fatalf("query failed: %v, unable to abort: %v", err, rb)
+		}
+		log.Fatal(err)
 		return
 	}
 
